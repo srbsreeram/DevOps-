@@ -1,0 +1,14 @@
+trigger: none
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: Checkout_changes_from_versionControl
+    displayName: Checkout changes from versionControl
+    steps:
+    - script: |
+        echo "Checking out..."
+        echo "$(Build.SourceBranch)"
+        echo "$(Build.sourceVersion)"
+      displayName: Build Script
