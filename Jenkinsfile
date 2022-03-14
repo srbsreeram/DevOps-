@@ -11,7 +11,7 @@ node {
  
 def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY ?: "3MVG9pRzvMkjMb6mXvHB8xFyLO9q5Yx6dmE4J1C2ggfdnI.CJ6QTBZGLIURCkwr4MsY_TsFOGiucQRroLuy.Q"
 def SF_USERNAME=env.SF_USERNAME ?: "sirid@cognizant.com.qaorg"
-def SERVER_KEY_CREDENTIALS_ID=env.SERVER_KEY_CREDENTIALS_ID ?: "jwt_key_file"
+def SERVER_KEY_CREDENTIALS_ID=env.SERVER_KEY_CREDENTIALS_ID 
 //def DEPLOYDIR='src'
 def TEST_LEVEL='NoTestRun'
 def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
