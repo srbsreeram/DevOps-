@@ -24,8 +24,8 @@ checkout scm
 // JWT key credentials.
 // -------------------------------------------------------------------------
 
- withEnv(["HOME=${env.WORKSPACE}"]) {
-withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
+//withEnv(["HOME=${env.WORKSPACE}"]) {
+//withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
 // -------------------------------------------------------------------------
 // Authenticate to Salesforce using the server key.
 // -------------------------------------------------------------------------
