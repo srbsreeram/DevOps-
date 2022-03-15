@@ -1,24 +1,19 @@
 #!groovy
 
 node {
-
+    
+    // -------------------------------------------------------------------------
+    // Defining Org Variables
+    // -------------------------------------------------------------------------
+	
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY
     def SF_USERNAME=env.SF_USERNAME
     def SERVER_KEY_CREDENTIALS_ID=env.SERVER_KEY_CREDENTIALS_ID
-    def DEPLOYDIR='src'
+    def DEPLOYDIR='forceapp'
     def TEST_LEVEL='NoTestRun'
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
-	
-    //def SF_CONSUMER_KEY='3MVG9pRzvMkjMb6m7wGEnOvX9BGgFIJI2IYQcmt2_yfBI66f77tuPn8Zh8vsAZEiGeF_qqNZJYphNoFQsF4nq'
-    //def SF_USERNAME='srbsreeram@gmail.com'
-    //def workspace = env.WORKSPACE
-    //def SERVER_KEY_CREDENTIALS_ID='533af427-d8e2-433c-8353-3ba2fad46fd3'
-    //def SERVER_KEY_CREDENTIALS_ID = env.SERVER_KEY_CREDENTIALS_ID ?: "533af427-d8e2-433c-8353-3ba2fad46fd3"
-    //def DEPLOYDIR='src'
-    //def TEST_LEVEL='RunLocalTests'
-    //def SF_INSTANCE_URL ='https://login.salesforce.com'
-
-
+    
+    //Defining SFDX took kit path against toolbelt
     def toolbelt = tool 'toolbelt'
 
 
@@ -33,7 +28,7 @@ node {
 
     // -------------------------------------------------------------------------
     // Run all the enclosed stages with access to the Salesforce
-    // JWT key credentials.
+    // JWT key credentials
     // -------------------------------------------------------------------------
 
  	withEnv(["HOME=${env.WORKSPACE}"]) {	
@@ -41,20 +36,23 @@ node {
 	    withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
 		// -------------------------------------------------------------------------
 		// Authenticate to Salesforce using the server key.
+		// Installing SF Powerkit Plugin
 		// -------------------------------------------------------------------------
 
 		stage('Authorize to Salesforce') {
 			rc = command "echo y | ${toolbelt}sfdx plugins:install sfpowerkit"
-			//rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --jwtkeyfile ${server_key_file} --username ${SF_USERNAME} --setalias UAT"
-      if (isUnix()) {
-                rc = sh returnStatus: true, script: "${toolbelt} force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwtkeyfile ${server_key_file} --setdefaultdevhubusername --instanceurl ${SF_INSTANCE_URL}"
-            }else{
-                 //rc = bat returnStatus: true, script: "\"${toolbelt}\sfdx" force:auth:jwt:grant --clientid ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwtkeyfile \"${server_key_file}\" --setdefaultdevhubusername --instanceurl ${SF_INSTANCE_URL}"
-	         rc = command "${toolbelt}sfdx auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --jwtkeyfile ${server_key_file} --username ${SF_USERNAME} --setalias UAT"
-            }
-		    if (rc != 0) {
-			error 'Salesforce org authorization failed.'
-		    }
+      			if (isUnix()) 
+				{
+                		rc = sh "${toolbelt}sfdx auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --jwtkeyfile ${server_key_file} --username ${SF_USERNAME} --setalias UAT"
+            			}
+			else	
+				{
+	         		rc = command "${toolbelt}sfdx auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --jwtkeyfile ${server_key_file} --username ${SF_USERNAME} --setalias UAT"
+            			}
+		    	if (rc != 0) 
+				{
+				error 'Salesforce org authorization failed.'
+		    		}
 		}
 
 
