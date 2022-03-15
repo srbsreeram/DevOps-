@@ -158,6 +158,10 @@
         <label>january Name</label>
         <type>Text</type>
     </nameField>
+    <nameField>
+        <label>February Name</label>
+        <type>Text</type>
+    </nameField>
     <pluralLabel>januarys</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
