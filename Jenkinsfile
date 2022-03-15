@@ -9,9 +9,13 @@ node {
     def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY
     def SF_USERNAME=env.SF_USERNAME
     def SERVER_KEY_CREDENTIALS_ID=env.SERVER_KEY_CREDENTIALS_ID
-    def DEPLOYDIR='forceapp'
+    def DEPLOYDIR='force-app'
+    def SF_DELTA_FOLDER='DELTA_PKG'
     def TEST_LEVEL='NoTestRun'
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
+	
+    def SF_SOURCE_COMMIT_ID=''
+    def SF_TARGET_COMMIT_ID=''
     
     //Defining SFDX took kit path against toolbelt
     def toolbelt = tool 'toolbelt'
@@ -52,6 +56,21 @@ node {
 		    	if (rc != 0) 
 				{
 				error 'Salesforce org authorization failed.'
+		    		}
+		}
+		    
+		stage('Create_Delta_Package') {
+      			if (isUnix()) 
+				{
+                		rc = sh "${toolbelt}sfdx sfpowerkit:project:diff -d ${SF_DELTA_FOLDER} -r ${SF_SOURCE_COMMIT_ID} -t ${SF_TARGET_COMMIT_ID}"
+            			}
+			else	
+				{
+	         		rc = command "${toolbelt}sfdx sfpowerkit:project:diff -d ${SF_DELTA_FOLDER} -r ${SF_SOURCE_COMMIT_ID} -t ${SF_TARGET_COMMIT_ID}"
+            			}
+		    	if (rc != 0) 
+				{
+				error 'Delta Package Creation failed.'
 		    		}
 		}
 
