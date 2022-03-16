@@ -158,10 +158,6 @@
         <label>testForAnt Name</label>
         <type>Text</type>
     </nameField>
-    <nameField>
-        <label>Last Name</label>
-        <type>Text</type>
-    </nameField>
     <pluralLabel>testForAnts</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
