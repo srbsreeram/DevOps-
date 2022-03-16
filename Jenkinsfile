@@ -61,7 +61,7 @@ node {
 		}
 		    
 		stage('Create_Delta_Package') {
-      			if (DEPLOYMENT_TYPE == DELTA){	
+      			if (DEPLOYMENT_TYPE == 'DELTA'){	
             			if (isUnix()) 
 				{
                 			rc = sh "${toolbelt}sfdx sfpowerkit:project:diff -d ${SF_DELTA_FOLDER} -r ${SF_SOURCE_COMMIT_ID} -t ${SF_TARGET_COMMIT_ID}"
