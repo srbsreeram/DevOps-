@@ -14,8 +14,8 @@ node {
     def TEST_LEVEL='NoTestRun'
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
 	
-    def SF_SOURCE_COMMIT_ID='be275010055d184fdca5b6638be2352c61d20779'
-    def SF_TARGET_COMMIT_ID='b67f30a2746ee11ef2c0141781ee3af14918ebb8'
+    def SF_SOURCE_COMMIT_ID=env.SOURCE_BRANCH
+    def SF_TARGET_COMMIT_ID=env.TARGET_BRANCH
     
     //Defining SFDX took kit path against toolbelt
     def toolbelt = tool 'toolbelt'
