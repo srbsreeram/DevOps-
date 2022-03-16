@@ -14,6 +14,7 @@ node {
     def TEST_LEVEL='NoTestRun'
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
 	
+    def DEPLOYMENT_TYPE=env.DEPLOYMENT_TYPE // Incremental Deployment = DELTA ; Full Deployment = FULL
     def SF_SOURCE_COMMIT_ID=env.SOURCE_BRANCH
     def SF_TARGET_COMMIT_ID=env.TARGET_BRANCH
     
