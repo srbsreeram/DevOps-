@@ -59,7 +59,11 @@ node {
 				error 'Salesforce org authorization failed.'
 		    		}
 		}
-		    
+		 
+		// -------------------------------------------------------------------------
+		// Creating Delta Package with the changes.
+		// -------------------------------------------------------------------------
+
 		stage('Create_Delta_Package') {
       			if (DEPLOYMENT_TYPE == 'DELTA'){	
             			if (isUnix()) 
@@ -79,6 +83,10 @@ node {
               			echo "Deployment is for All Components from Repository"
           		}
 		}
+
+		// -------------------------------------------------------------------------
+		// Validating Stage.
+		// -------------------------------------------------------------------------
 
 		stage('Package_Validation') {
       			if (DEPLOYMENT_TYPE == 'DELTA')
@@ -110,6 +118,40 @@ node {
         	}
 		    
 		// -------------------------------------------------------------------------
+		// Deployment Stage.
+		// -------------------------------------------------------------------------
+    
+		    
+		stage('Package_Deployment') {
+      			if (DEPLOYMENT_TYPE == 'DELTA')
+            		{
+            			if (isUnix()) 
+				{
+                			rc = sh "${toolbelt}sfdx force:source:deploy -p ${SF_DELTA_FOLDER}/${DEPLOYDIR} -u ${SF_USERNAME} -w 500 -l ${TEST_LEVEL}"
+            			}
+				else	
+				{
+	         			rc = command "${toolbelt}sfdx force:source:deploy -p ${SF_DELTA_FOLDER}/${DEPLOYDIR} -u ${SF_USERNAME} -w 500 -l ${TEST_LEVEL}"
+            			}
+            		}
+            		else
+            		{
+            			if (isUnix()) 
+				{
+                			rc = sh "${toolbelt}sfdx force:source:deploy -p ${DEPLOYDIR} -u ${SF_USERNAME} -w 500 -l ${TEST_LEVEL}"
+            			}
+				else	
+				{
+	         			rc = command "${toolbelt}sfdx force:source:deploy -p ${DEPLOYDIR} -u ${SF_USERNAME} -w 500 -l ${TEST_LEVEL}"
+            			}
+            		}
+		    	if (rc != 0) 
+				{
+				error 'Component Validation Failed.'
+		    		}
+        	}
+		    
+		// -------------------------------------------------------------------------
 		// Deploy metadata and execute unit tests.
 		// -------------------------------------------------------------------------
 
@@ -117,18 +159,6 @@ node {
 		//    rc = command "${toolbelt}/sfdx force:mdapi:deploy --wait 10 --deploydir ${DEPLOYDIR} --targetusername UAT --testlevel ${TEST_LEVEL}"
 		//    if (rc != 0) {
 		//	error 'Salesforce deploy and test run failed.'
-		//    }
-		//}
-
-
-		// -------------------------------------------------------------------------
-		// Example shows how to run a check-only deploy.
-		// -------------------------------------------------------------------------
-
-		//stage('Check Only Deploy') {
-		//    rc = command "${toolbelt}/sfdx force:mdapi:deploy --checkonly --wait 10 --deploydir ${DEPLOYDIR} --targetusername UAT --testlevel ${TEST_LEVEL}"
-		//    if (rc != 0) {
-		//        error 'Salesforce deploy failed.'
 		//    }
 		//}
 	    }
